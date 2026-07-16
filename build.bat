@@ -1,91 +1,129 @@
 @echo off
-REM ESP32-C6 Tuya Project Build Script for Windows
+REM ESP32-C6 Tuya Project Interactive Menu
 
 setlocal enabledelayedexpansion
 
-if "%1"=="" (
-    set PORT=COM3
-) else (
-    set PORT=%1
-)
+REM Default port is COM83
+set PORT=COM83
 
-echo ======================================
-echo TUYA ESP32-C6 Build Script - Windows
-echo ======================================
-echo Target Port: %PORT%
 echo.
-
-REM Check if IDF_PATH is set
-if "%IDF_PATH%"=="" (
-    echo ERROR: IDF_PATH environment variable is not set
-    echo Please set IDF_PATH to your ESP-IDF installation directory
-    pause
-    exit /b 1
-)
-
-REM Source ESP-IDF environment
-call %IDF_PATH%\tools\idf_cmd_init.bat
+echo =====================================
+echo   ESP32-C6 Tuya Build Menu
+echo =====================================
+echo.
 
 :menu
 cls
-echo ======================================
-echo TUYA ESP32-C6 Build Menu
-echo ======================================
-echo 1. Build
-echo 2. Flash
-echo 3. Monitor
-echo 4. Build and Flash
-echo 5. Build, Flash and Monitor
-echo 6. Clean
-echo 7. Menu Config
-echo 8. Exit
 echo.
-set /p choice=Select option (1-8): 
+echo   ╔═════════════════════════════════╗
+echo   ║   ESP32-C6 Tuya Build Menu      ║
+echo   ║   Port: %PORT%                   ║
+echo   ╚═════════════════════════════════╝
+echo.
+echo   [1] 💻 Build Only
+echo   [2] ⚡ Flash Only  
+echo   [3] 📊 Monitor (COM83)
+echo   [4] 🔥 Build + Flash
+echo   [5] ⭐ Build + Flash + Monitor (FULL)
+echo   [6] 🧹 Clean Build
+echo   [7] ⚙️  MenuConfig
+echo   [8] 🎯 Set Target (ESP32-C6)
+echo   [9] ❌ Exit
+echo.
+set /p choice=   Enter choice (1-9): 
 
 if "%choice%"=="1" (
-    echo Building project...
+    cls
+    echo [*] Building project...
+    echo.
+    call C:\Users\devin.huang\esp\v5.4.2\esp-idf\export.bat
     call idf.py build
+    echo.
     pause
     goto menu
 )
+
 if "%choice%"=="2" (
-    echo Flashing to device...
+    cls
+    echo [*] Flashing to %PORT%...
+    echo.
+    call C:\Users\devin.huang\esp\v5.4.2\esp-idf\export.bat
     call idf.py -p %PORT% flash
+    echo.
     pause
     goto menu
 )
+
 if "%choice%"=="3" (
-    echo Monitoring serial output...
+    cls
+    echo [*] Connecting to %PORT% monitor...
+    echo [*] Press Ctrl+] to exit
+    echo.
+    call C:\Users\devin.huang\esp\v5.4.2\esp-idf\export.bat
     call idf.py -p %PORT% monitor
     goto menu
 )
+
 if "%choice%"=="4" (
-    echo Building and flashing...
+    cls
+    echo [*] Building and flashing to %PORT%...
+    echo.
+    call C:\Users\devin.huang\esp\v5.4.2\esp-idf\export.bat
     call idf.py -p %PORT% build flash
+    echo.
     pause
     goto menu
 )
+
 if "%choice%"=="5" (
-    echo Building, flashing and monitoring...
+    cls
+    echo [*] FULL BUILD: Build + Flash + Monitor to %PORT%...
+    echo [*] Press Ctrl+] to exit monitor
+    echo.
+    call C:\Users\devin.huang\esp\v5.4.2\esp-idf\export.bat
     call idf.py -p %PORT% build flash monitor
     goto menu
 )
+
 if "%choice%"=="6" (
-    echo Cleaning build files...
+    cls
+    echo [*] Cleaning build directory...
+    echo.
+    call C:\Users\devin.huang\esp\v5.4.2\esp-idf\export.bat
     call idf.py fullclean
+    echo [OK] Build cleaned
+    echo.
     pause
     goto menu
 )
+
 if "%choice%"=="7" (
-    echo Opening menuconfig...
+    cls
+    echo [*] Opening menuconfig...
+    echo.
+    call C:\Users\devin.huang\esp\v5.4.2\esp-idf\export.bat
     call idf.py menuconfig
     goto menu
 )
+
 if "%choice%"=="8" (
-    echo Exiting...
+    cls
+    echo [*] Setting target to ESP32-C6...
+    echo.
+    call C:\Users\devin.huang\esp\v5.4.2\esp-idf\export.bat
+    call idf.py set-target esp32c6
+    echo [OK] Target set
+    echo.
+    pause
+    goto menu
+)
+
+if "%choice%"=="9" (
+    echo [*] Exiting...
     exit /b 0
 )
 
-echo Invalid option. Please try again.
+echo [ERROR] Invalid choice
 pause
 goto menu
+
