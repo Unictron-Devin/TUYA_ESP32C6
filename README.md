@@ -1,15 +1,20 @@
 # TUYA ESP32-C6 Project
 
-這是一個針對 ESP32-C6 微控制器的 Tuya 應用專案，使用 ESP-IDF 框架開發。
+這是一個將 nRF52832 TuyaOS BLE 專案移植到 ESP32-C6 的 ESP-IDF 專案。
+
+目前已完成 ESP-NimBLE Tuya BLE transport、FD50 GATT Service、Write/Notify、
+Tuya 憑證 NVS 儲存介面及雙槽 OTA 分區。完整 Smart Life 配對仍需要 Tuya
+提供 ESP32-C6/RISC-V 相容的 secure protocol library。詳細狀態請參考
+[`MIGRATION_STATUS.md`](MIGRATION_STATUS.md)。
 
 ## 項目結構
 
 ```
 TUYA_ESP32C6/
 ├── main/                    # 主應用程式
-│   ├── main.c              # 主程式入口
+│   ├── main.c              # 主程式與 BLE transport 測試入口
 │   └── CMakeLists.txt       # 主件構建配置
-├── components/             # 可重用元件目錄
+├── components/             # BLE transport、Tuya storage 與共用元件
 ├── build/                  # 構建輸出目錄（編譯後生成）
 ├── CMakeLists.txt          # 頂級構建配置
 ├── partitions.csv          # Flash 分區表
@@ -49,10 +54,7 @@ idf.py set-target esp32c6
 idf.py menuconfig
 ```
 
-在 menuconfig 中調整設定：
-- 設定 WiFi SSID 和密碼
-- BLE 配置
-- 其他特定設定
+`sdkconfig.defaults` 已啟用 ESP-NimBLE 並將最大連線數設定為 1。
 
 ### 3. 編譯
 
@@ -88,7 +90,9 @@ idf.py -p /dev/ttyUSB0 build flash monitor
 
 - `CONFIG_IDF_TARGET="esp32c6"` - 目標芯片
 - `CONFIG_BT_ENABLED=y` - 啟用藍牙
-- `CONFIG_BT_BLE_ENABLED=y` - 啟用 BLE
+- `CONFIG_BT_NIMBLE_ENABLED=y` - 啟用 ESP-NimBLE
+- `CONFIG_BT_NIMBLE_ATT_PREFERRED_MTU=247` - 支援 244-byte ATT payload
+- `CONFIG_PARTITION_TABLE_CUSTOM=y` - 使用 OTA/Tuya NVS 分區表
 - `CONFIG_SPI_FLASH_FREQ_80M=y` - Flash 時鐘
 
 編輯 `sdkconfig.defaults` 或使用 `idf.py menuconfig` 修改配置。
