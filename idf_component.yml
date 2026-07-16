@@ -1,0 +1,10 @@
+version: "2.0"
+
+description: Tuya ESP32-C6 Application
+
+metadata:
+  version: "1.0.0"
+
+dependencies:
+  esp-idf:
+    version: ">=5.1"
