@@ -3,6 +3,13 @@ REM ESP32-C6 Tuya Project Interactive Menu
 setlocal enabledelayedexpansion
 set PORT=COM83
 
+REM Change to project directory
+cd /d "D:\User\Project\ESP32-C6_Project\TUYA_ESP32C6"
+
+REM Set Python environment
+set "IDF_PYTHON_ENV_PATH=D:\Espressif\python_env\idf5.4_py3.11_env"
+set "PATH=%IDF_PYTHON_ENV_PATH%\Scripts;%PATH%"
+
 :menu
 cls
 echo.
@@ -72,7 +79,19 @@ if "%choice%"=="5" (
     echo [*] Press Ctrl+] to exit monitor
     echo.
     call C:\Users\devin.huang\esp\v5.4.2\esp-idf\export.bat
+    if errorlevel 1 (
+        echo [ERROR] Failed to initialize ESP-IDF environment
+        pause
+        goto menu
+    )
     call idf.py -p %PORT% build flash monitor
+    if errorlevel 1 (
+        echo [ERROR] Build or flash failed - check COM port
+        pause
+        goto menu
+    )
+    echo [OK] Build + Flash + Monitor completed
+    pause
     goto menu
 )
 
