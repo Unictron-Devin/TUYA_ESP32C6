@@ -1,34 +1,25 @@
 @echo off
 REM ESP32-C6 Tuya Project Interactive Menu
-
 setlocal enabledelayedexpansion
-
-REM Default port is COM83
 set PORT=COM83
-
-echo.
-echo =====================================
-echo   ESP32-C6 Tuya Build Menu
-echo =====================================
-echo.
 
 :menu
 cls
 echo.
-echo   ╔═════════════════════════════════╗
-echo   ║   ESP32-C6 Tuya Build Menu      ║
-echo   ║   Port: %PORT%                   ║
-echo   ╚═════════════════════════════════╝
+echo =====================================
+echo   ESP32-C6 Tuya Build Menu
+echo   Port: %PORT%
+echo =====================================
 echo.
-echo   [1] 💻 Build Only
-echo   [2] ⚡ Flash Only  
-echo   [3] 📊 Monitor (COM83)
-echo   [4] 🔥 Build + Flash
-echo   [5] ⭐ Build + Flash + Monitor (FULL)
-echo   [6] 🧹 Clean Build
-echo   [7] ⚙️  MenuConfig
-echo   [8] 🎯 Set Target (ESP32-C6)
-echo   [9] ❌ Exit
+echo   [1] Build Only
+echo   [2] Flash Only  
+echo   [3] Monitor
+echo   [4] Build + Flash
+echo   [5] Build + Flash + Monitor (FULL)
+echo   [6] Clean Build
+echo   [7] MenuConfig
+echo   [8] Set Target
+echo   [9] Exit
 echo.
 set /p choice=   Enter choice (1-9): 
 
